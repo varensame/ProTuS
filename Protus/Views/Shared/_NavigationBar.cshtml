@@ -1,0 +1,58 @@
+﻿<div class="sidebar-wrapper">
+    <div class="user">
+        <div class="photo">
+            <img src="/assets/img/faces/face-2.jpg" />
+        </div>
+        <div class="info">
+            <a data-toggle="collapse" href="#collapseExample" class="collapsed">
+                <span>
+                    @User.Identity.Name
+                    <b class="caret"></b>
+                </span>
+            </a>
+            <div class="clearfix"></div>
+
+            <div class="collapse" id="collapseExample">
+                <ul class="nav">
+                    
+                    <li>
+                        <a href="/identity/account/logout">
+                            <span class="sidebar-mini ti-power-off">&nbsp;</span>
+                            <span class="sidebar-normal">Log Out</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <ul class="nav">
+        <li class="active">
+            <a href="/Home/Index">
+                <i class="ti-home"></i>
+                <p>Dashboard</p>
+            </a>
+        </li>
+        @await Component.InvokeAsync("CourseTopicsComponent")
+        
+        <li>
+            <a href="calendar.html">
+                <i class="ti-calendar"></i>
+                <p>Learning Material</p>
+            </a>
+        </li>
+        <li  >
+            <a href="calendar.html">
+                <i class="ti-pie-chart"></i>
+                <p>Statistics</p>
+            </a>
+        </li>
+        <li  >
+            <a href="calendar.html">
+                <i class="ti-comment"></i>
+                <p>Communication</p>
+            </a>
+        </li>
+
+
+    </ul>
+</div>

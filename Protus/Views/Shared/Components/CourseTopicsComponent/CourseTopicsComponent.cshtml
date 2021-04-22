@@ -1,0 +1,36 @@
+﻿@model List<Protus.Data.Entities.Course>
+
+@foreach (var course in Model)
+{
+    <li>
+        <a data-toggle="collapse" href="#dashboardOverview_@course.Id">
+            <i class="ti-pencil-alt"></i>
+            <p>
+                @course.Name
+                <b class="caret"></b>
+            </p>
+        </a>
+        <div class="collapse" id="dashboardOverview_@course.Id">
+            <ul class="nav">
+
+                @if (course.Topics!=null)
+                {
+                    foreach (var topic in course.Topics.OrderBy(x=>x.TopicId))
+                    {
+                        <li>
+                            <a href="/Home/ViewTopicDetails/@(topic.TopicId)">
+                                <i class="ti-write"></i>
+                                <p>@topic.Name</p>
+                            </a>
+                        </li>
+                    }
+                }
+
+
+
+            </ul>
+        </div>
+    </li>
+
+
+}
