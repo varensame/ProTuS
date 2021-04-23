@@ -20,10 +20,11 @@
                     </div>
                     <div class="form-group">
                         <label>Password</label>
-                        <input  asp-for="Input.Password"  placeholder="Password" class="form-control input-no-border">
+                        <input asp-for="Input.Password" placeholder="Password" class="form-control input-no-border">
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
                 </div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="card-footer text-center">
                     <button type="submit" class="btn btn-fill btn-wd ">Login</button>
                     <div class="forgot">

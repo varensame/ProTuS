@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Protus.Data;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace Protus.Controllers
         
         public async Task<IActionResult>  ViewTopicDetails(int id)
         {
-            var topic=await applicationDbContext.Topics.FindAsync(id);
+            var topic=await applicationDbContext.Topics.Include(x=>x.Course).FirstOrDefaultAsync(x=>x.TopicId==id);
             return View(topic);
         }
     }

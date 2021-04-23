@@ -5,9 +5,40 @@
  
 <div class="row">
     <div class="col-md-12" style="padding:5px 20px;">
-        <h4>@Model.Name</h4>
-        @(Html.Raw(Model.Description))
+        @*<h4>@Model.Name</h4>
+        @(Html.Raw(Model.Description))*@
+
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">@Model.Course.Name - @Model.Name</h4>
+            </div>
+            <div class="card-content">
+                <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                        <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+                            <li class="active"><a href="#home" data-toggle="tab" aria-expanded="true">Explanation</a></li>
+                            <li class=""><a href="#profile" data-toggle="tab" aria-expanded="false">Examples</a></li>
+                            <li class=""><a href="#messages" data-toggle="tab" aria-expanded="false">Challenges</a></li>
+                            <li class=""><a href="#messages" data-toggle="tab" aria-expanded="false">Coding Exercises</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="my-tab-content" class="tab-content text-center">
+                    <div class="tab-pane active" id="home">
+                        @(Html.Raw(Model.Description))
+                    </div>
+                    <div class="tab-pane" id="profile">
+                        <p>Here is your profile.</p>
+                    </div>
+                    <div class="tab-pane" id="messages">
+                        <p>Here are your messages.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
+
+
 
