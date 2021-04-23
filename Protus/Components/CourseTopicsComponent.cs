@@ -19,7 +19,7 @@ namespace Nexgen_Tutoring.Components
         public async Task<IViewComponentResult> InvokeAsync()
         {
             // This component will display all the courses and their topics in the left menu
-            var _data =await applicationDbContext.Courses.Include(x => x.Topics).ToListAsync();
+            var _data =await applicationDbContext.Courses.Include(x => x.Topics).Where(x=>x.IsDeleted!=true).ToListAsync();
             return await Task.FromResult((IViewComponentResult)View("CourseTopicsComponent", _data));
         }
     }

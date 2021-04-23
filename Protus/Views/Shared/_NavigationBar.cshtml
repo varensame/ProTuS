@@ -14,7 +14,7 @@
 
             <div class="collapse" id="collapseExample">
                 <ul class="nav">
-                    
+
                     <li>
                         <a href="/identity/account/logout">
                             <span class="sidebar-mini ti-power-off">&nbsp;</span>
@@ -32,21 +32,42 @@
                 <p>Dashboard</p>
             </a>
         </li>
-        @await Component.InvokeAsync("CourseTopicsComponent")
-        
+        @if (User.IsInRole("Student"))
+        {
+            <text>
+                @await Component.InvokeAsync("CourseTopicsComponent")
+            </text>
+        }
+
+        @if (!User.IsInRole("Student"))
+        {
+                <li>
+                    <a href="/Courses/Index">
+                        <i class="ti-calendar"></i>
+                        <p>Courses</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Topics/Index">
+                        <i class="ti-calendar"></i>
+                        <p>Topics</p>
+                    </a>
+                </li>
+}
+
         <li>
             <a href="calendar.html">
                 <i class="ti-calendar"></i>
                 <p>Learning Material</p>
             </a>
         </li>
-        <li  >
+        <li>
             <a href="calendar.html">
                 <i class="ti-pie-chart"></i>
                 <p>Statistics</p>
             </a>
         </li>
-        <li  >
+        <li>
             <a href="calendar.html">
                 <i class="ti-comment"></i>
                 <p>Communication</p>

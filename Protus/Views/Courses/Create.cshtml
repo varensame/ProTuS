@@ -1,0 +1,44 @@
+﻿@model Protus.DTOS.CourseDto
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <form asp-action="Create" class="form-horizontal">
+                <input asp-for="Id" type="hidden" />
+                <div class="card-header">
+                    <h4 class="card-title">
+                        @(Model.Id>0?"Edit":"Create")
+                         Course
+                    </h4>
+                </div>
+                <div class="card-content">
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label col-md-2"></label>
+                        <div class="col-md-4">
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="control-label col-md-2"></label>
+                        <div class="col-md-4">
+                            <input type="submit" value="Save" class="btn btn-default" />
+                        </div>
+                    </div>
+                    
+                </div>
+               
+            </form>
+
+        </div> <!-- end card -->
+    </div>
+</div>
+  
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

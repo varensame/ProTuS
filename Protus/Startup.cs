@@ -45,7 +45,8 @@ namespace Protus
                 options.Password.RequireDigit = false;
             })
               .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddClaimsPrincipalFactory<ProtusClaimsPrincipleFactory>(); ;
             if (Env.IsDevelopment())
             {
                 services.AddControllersWithViews(x => x.SuppressAsyncSuffixInActionNames = false).AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null).AddRazorRuntimeCompilation();
