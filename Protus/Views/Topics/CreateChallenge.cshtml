@@ -1,0 +1,147 @@
+﻿@model Protus.DTOS.ChallengeDto
+
+@{
+    ViewData["Title"] = "Create";
+}
+<link rel="stylesheet" href="~/lib/codemirror/lib/codemirror.css">
+<script src="~/lib/codemirror/lib/codemirror.js"></script>
+<script src="~/lib/codemirror/addon/edit/matchbrackets.js"></script>
+<link rel="stylesheet" href="~/lib/codemirror/addon/hint/show-hint.css">
+<script src="~/lib/codemirror/addon/hint/show-hint.js"></script>
+<script src="~/lib/codemirror/mode/clike//clike.js"></script>
+<div id="optionsInit" style="display:none;">
+    <div class="col-md-12 optDiv" style="margin-top:10px">
+        <div class="col-md-6"><input type="text" placeholder="Enter Option code here.." class="form-control optionTB" /></div>
+        <div class="col-md-6" style="padding-top:7px;">Is Answer? <input type="checkbox" class="optionCheckCB" /></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <form asp-action="CreateChallenge" class="form-horizontal">
+                <input asp-for="TopicId" type="hidden" />
+                <input asp-for="Id" type="hidden" />
+                <input asp-for="OptionsString" type="hidden" />
+                <div class="card-header">
+                    <h4 class="card-title">
+                        Adds
+                        Challenge
+                    </h4>
+                </div>
+                <div class="card-content">
+
+                    <div class="form-group">
+                        <label asp-for="Title" class="control-label col-md-2"></label>
+                        <div class="col-md-4">
+                            <input asp-for="Title" placeholder="Enter Title" class="form-control" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label col-md-2"></label>
+                        <div class="col-md-4">
+                            <textarea asp-for="Description" placeholder="Enter Description" class="form-control"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Code" class="control-label col-md-2"></label>
+                        <div class="col-md-8">
+                            <textarea asp-for="Code" class="form-control"></textarea>
+                            <span asp-validation-for="Code" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2"></label>
+                        <div class="col-md-8">
+                            <p><strong>Add Code Options :</strong></p>
+                            <div id="optionsContainer">
+
+                                @if (Model.ChallengeOptions != null && Model.ChallengeOptions.Count() > 0)
+                                {
+                                    foreach (var item in Model.ChallengeOptions)
+                                    {
+                                        <div class="col-md-12 optDiv" style="margin-top:10px">
+                                            <div class="col-md-6"><input type="text" placeholder="Enter Option code here.." value="@item.Option" class="form-control optionTB" /></div>
+                                            <div class="col-md-6" style="padding-top:7px;">Is Answer? <input type="checkbox" @(item.IsAnswer ? "checked" : "") class="optionCheckCB" /></div>
+                                        </div>
+                                    }
+
+                                }
+                                else
+                                {
+                                    <div class="col-md-12 optDiv" style="margin-top:10px">
+                                        <div class="col-md-6"><input type="text" placeholder="Enter Option code here.." class="form-control optionTB" /></div>
+                                        <div class="col-md-6" style="padding-top:7px;">Is Answer? <input type="checkbox" class="optionCheckCB" /></div>
+                                    </div>
+                                }
+
+
+                            </div>
+                            <div class="col-md-12" style="margin:10px;">
+                                <button type="button" onclick="AddOption()" class="btn btn-success btn-fill btn-sm">+ Add More Options</button>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2"></label>
+                        <div class="col-md-4">
+                            <input type="submit" onclick="return BeforeSubmit()" value="Save" class="btn btn-default" />
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div> <!-- end card -->
+    </div>
+</div>
+
+
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script type="text/javascript">
+
+        var _option;
+        $(document).ready(function () {
+
+            var editor = CodeMirror.fromTextArea(document.getElementById("Code"), {
+                lineNumbers: true,
+                matchBrackets: true,
+                mode: "text/x-java"
+            });
+            editor.save();
+            editor.setSize(null, 500);
+            _option = $('#optionsInit').html();
+
+
+        });
+        function AddOption() {
+            $('#optionsContainer').append(_option);
+        }
+        function BeforeSubmit() {
+            let options = [];
+            $('.optDiv').each(function () {
+                let option = $(this).find('.optionTB').val();
+                let isAnswer = $(this).find('.optionCheckCB').prop('checked');
+                if (option.trim() !== '') {
+                    options.push({
+                        Option: option,
+                        IsAnswer: isAnswer
+                    });
+                }
+            });
+
+            $('#OptionsString').val(JSON.stringify(options));
+            return true;
+        }
+    </script>
+}

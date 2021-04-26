@@ -1,0 +1,117 @@
+﻿@model Protus.Data.Entities.Challenge
+<style type="text/css">
+    .selected{
+        background-color:lightgreen;
+    }
+    .wrong{
+        background-color:orangered;
+    }
+</style>
+    <div class="panel panel-primary">
+        <div class="panel-heading">@Model.Title</div>
+        <div class="panel-body">@Model.Description</div>
+    </div>
+<div class="row">
+    <div class="col-md-12" >
+        <textarea class="form-control" id="codeViewEditor">@Model.Code</textarea>
+    </div>
+</div>
+<div class="row" style="padding:3%;">
+    <div class="panel panel-primary">
+
+        <div class="panel-body">
+
+            @if (Model.ChallengeOptions != null && Model.ChallengeOptions.Count > 0)
+            {
+                var counter = 0;
+                foreach (var item in Model.ChallengeOptions)
+                {
+                    <div class="row">
+                        <div class="col-md-6 optADivs" data-isanswer="@(item.IsAnswer?1:0)" onclick="OptionContainer(this)" style="margin-top:10px;border:2px dotted blue;padding:12px;cursor:pointer;border-radius:5px;">
+                            @item.Option
+                        </div>
+                    </div>
+                }
+
+
+            }
+        </div>
+
+    </div>
+    @if (Model.ChallengeOptions != null && Model.ChallengeOptions.Count > 0)
+    {
+        <p class="text-center">
+            <button type="button" class="btn btn-primary btn-fill" onclick="SubmitChalllenge()">Submit</button>
+        </p>
+        <div id="wrongAnswer" style="display:none">
+            <div class="alert alert-danger fade in alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                Your answer is incorrect!
+            </div>
+        </div>
+        <div id="successAnswer" style="display:none">
+            <div class="alert alert-success fade in alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                Your answer is correct!
+            </div>
+        </div>
+    }
+
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var editor = CodeMirror.fromTextArea(document.getElementById("codeViewEditor"), {
+            lineNumbers: true,
+            matchBrackets: true,
+            mode: "text/x-java"
+        });
+        editor.save();
+        editor.setSize(null, 500);
+
+    });
+    function SubmitChalllenge() {
+        $('.optADivs').each(function () {
+            if ($(this).attr('data-isanswer') === '1' && !$(this).hasClass('selected')) {
+                $(this).addClass('wrong');
+            }
+            if ($(this).attr('data-isanswer') === '0' && $(this).hasClass('selected')) {
+                $(this).addClass('wrong');
+            }
+
+
+
+        });
+        if ($('.wrong').length > 0) {
+            $('#wrongAnswer').show();
+            $('#successAnswer').hide();
+        }
+        else {
+            $.ajax({
+                type: 'POST',
+                url: '/Topics/SolvedChallenge/@(Model.Id)',
+                success: function () {
+                    window.location.href = window.location.href;
+                }
+            });
+        }
+    }
+    function OptionContainer($this) {
+        if ($($this).hasClass('wrong')) {
+            $($this).removeClass('selected');
+            $($this).removeClass('wrong');
+            return;
+        }
+        
+        if ($($this).hasClass('selected')) {
+            $($this).removeClass('selected');
+        }
+        else {
+            $($this).addClass('selected')
+        }
+    }
+</script>
+
+
+ 

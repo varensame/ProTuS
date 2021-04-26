@@ -8,6 +8,13 @@ namespace Protus.Data.Entities
 {
     public class Topic
     {
+
+        public Topic()
+        {
+            Challenges = new List<Challenge>();
+        }
+
+
         public int TopicId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -16,5 +23,7 @@ namespace Protus.Data.Entities
 
         [ForeignKey("CourseId")]
         public Course Course { get; set; }
+
+        public ICollection<Challenge> Challenges { get; set; }
     }
 }

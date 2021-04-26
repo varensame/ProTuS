@@ -228,6 +228,55 @@ namespace Protus.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Protus.Data.Entities.Challenge", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TopicId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TopicId");
+
+                    b.ToTable("Challenges");
+                });
+
+            modelBuilder.Entity("Protus.Data.Entities.ChallengeOption", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ChallengeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsAnswer")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Option")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChallengeId");
+
+                    b.ToTable("ChallengeOptions");
+                });
+
             modelBuilder.Entity("Protus.Data.Entities.Course", b =>
                 {
                     b.Property<int>("Id")
@@ -244,6 +293,24 @@ namespace Protus.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("Protus.Data.Entities.SolvedChallenge", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ChallengeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SolvedChallenges");
                 });
 
             modelBuilder.Entity("Protus.Data.Entities.Topic", b =>
@@ -318,6 +385,20 @@ namespace Protus.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Protus.Data.Entities.Challenge", b =>
+                {
+                    b.HasOne("Protus.Data.Entities.Topic", "Topic")
+                        .WithMany("Challenges")
+                        .HasForeignKey("TopicId");
+                });
+
+            modelBuilder.Entity("Protus.Data.Entities.ChallengeOption", b =>
+                {
+                    b.HasOne("Protus.Data.Entities.Challenge", "Challenge")
+                        .WithMany("ChallengeOptions")
+                        .HasForeignKey("ChallengeId");
                 });
 
             modelBuilder.Entity("Protus.Data.Entities.Topic", b =>

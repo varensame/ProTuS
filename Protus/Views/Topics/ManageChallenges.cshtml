@@ -1,0 +1,54 @@
+﻿@model List<Protus.Data.Entities.Challenge>
+@{
+    var counter = 0;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+
+                <h4 class="card-title">Manage Topic Challenge(s) </h4>
+                <p>
+                    @Html.ActionLink("Create New", "CreateChallenge", "Topics",new { topicId= ViewBag.topicId,Id=0 }, new { @class = "btn btn-primary", style = "margin-top:10px;" })
+                </p>
+            </div>
+            <div class="card-content">
+                <div class="table-responsive">
+                    <div class="table-responsive" style="overflow-x:scroll">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        #
+                                    </th>
+                                    <th>
+                                        Challenge
+                                    </th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @(++counter)
+                                        </td>
+                                        <td>
+                                            @item.Title
+                                        </td>
+                                        <td>
+                                            <a asp-action="CreateChallenge" asp-route-id="@item.Id" asp-route-topicId="@item.TopicId">Edit</a> 
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div><!--  end card  -->
+    </div> <!-- end col-md-12 -->
+</div> 

@@ -19,5 +19,9 @@ namespace Protus.Data
         }
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<Topic> Topics { get; set; }
+        public virtual DbSet<Challenge> Challenges { get; set; }
+        public virtual DbSet<ChallengeOption> ChallengeOptions { get; set; }
+        public virtual DbSet<SolvedChallenge> SolvedChallenges { get; set; }
+
     }
 }

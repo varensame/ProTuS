@@ -2,11 +2,16 @@
 @{
     ViewData["Title"] = "Topic Details";
 }
- 
+<link rel="stylesheet" href="~/lib/codemirror/lib/codemirror.css">
+<script src="~/lib/codemirror/lib/codemirror.js"></script>
+<script src="~/lib/codemirror/addon/edit/matchbrackets.js"></script>
+<link rel="stylesheet" href="~/lib/codemirror/addon/hint/show-hint.css">
+<script src="~/lib/codemirror/addon/hint/show-hint.js"></script>
+<script src="~/lib/codemirror/mode/clike//clike.js"></script>
 <div class="row">
     <div class="col-md-12" style="padding:5px 20px;">
         @*<h4>@Model.Name</h4>
-        @(Html.Raw(Model.Description))*@
+            @(Html.Raw(Model.Description))*@
 
         <div class="card">
             <div class="card-header">
@@ -18,7 +23,7 @@
                         <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
                             <li class="active"><a href="#home" data-toggle="tab" aria-expanded="true">Explanation</a></li>
                             <li class=""><a href="#profile" data-toggle="tab" aria-expanded="false">Examples</a></li>
-                            <li class=""><a href="#messages" data-toggle="tab" aria-expanded="false">Challenges</a></li>
+                            <li class=""><a href="#challenges" data-toggle="tab" aria-expanded="false">Challenges</a></li>
                             <li class=""><a href="#messages" data-toggle="tab" aria-expanded="false">Coding Exercises</a></li>
                         </ul>
                     </div>
@@ -30,8 +35,49 @@
                     <div class="tab-pane" id="profile">
                         <p>Here is your profile.</p>
                     </div>
-                    <div class="tab-pane" id="messages">
-                        <p>Here are your messages.</p>
+                    <div class="tab-pane" id="challenges">
+                        <div class="row">
+                            <h4>Challenges for current topic</h4>
+                            <div class="col-md-12">
+                                @if (Model.Challenges != null)
+                                {
+                                    foreach (var item in Model.Challenges)
+                                    {
+                                        <div class="col-md-3">
+                                            <div class="card">
+                                                <div class="card-content">
+                                                    <a href="javascript:OpenChallenge(@item.Id)">  <img src="~/assets/img/knight.png" /></a>
+                                                </div>
+                                                <div class="card-footer">
+                                                    @item.Title
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                            </div>
+                            <h4>Solved Challenges</h4>
+                            <div class="col-md-12">
+                                @if (ViewBag.solvedChallenges != null)
+                                {
+                                    foreach (var item in ViewBag.solvedChallenges as List<Protus.Data.Entities.Challenge>)
+                                    {
+                                        <div class="col-md-3">
+                                            <div class="card">
+                                                <div class="card-content">
+                                                    <a href="javascript:OpenChallenge(@item.Id)">  <img src="~/assets/img/knight.png" /></a>
+                                                </div>
+                                                <div class="card-footer">
+                                                    @item.Title
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -40,5 +86,50 @@
 
 </div>
 
+<div class="modal fade modal-primary" id="viewChallengeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-login">
+        <div class="modal-content">
+            <div class="card card-login card-plain">
+                <div class="modal-header ">
+                    <h5 style="margin:15px -3px;display:inline;">  <strong> Challenge</strong></h5>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="viewChallengeModalBody">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 
+
+
+<script type="text/javascript">
+    function OpenChallenge(challengeId) {
+        $.ajax({
+            type: 'GET',
+            url: '/Topics/GetChallengeDetails/' + challengeId,
+            success: function (response) {
+                $('#viewChallengeModalBody').html(response);
+                $('#viewChallengeModal').modal();
+            },
+            error: function () {
+
+            }
+        }).done(function () {
+
+            setTimeout(function () {
+                $('.CodeMirror').each(function (i,el) {
+                    el.CodeMirror.refresh();
+                });
+            }, 200);
+        });
+
+
+    }
+</script>
