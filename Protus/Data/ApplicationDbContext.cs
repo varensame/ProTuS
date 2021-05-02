@@ -22,6 +22,7 @@ namespace Protus.Data
         public virtual DbSet<Challenge> Challenges { get; set; }
         public virtual DbSet<ChallengeOption> ChallengeOptions { get; set; }
         public virtual DbSet<SolvedChallenge> SolvedChallenges { get; set; }
+        public virtual DbSet<Message> Messages { get; set; }
 
     }
 }

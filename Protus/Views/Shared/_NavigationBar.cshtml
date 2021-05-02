@@ -34,26 +34,24 @@
         </li>
         @if (User.IsInRole("Student"))
         {
-            <text>
-                @await Component.InvokeAsync("CourseTopicsComponent")
-            </text>
-        }
+    <text>
+        @await Component.InvokeAsync("CourseTopicsComponent")
+    </text>}
 
         @if (!User.IsInRole("Student"))
         {
-                <li>
-                    <a href="/Courses/Index">
-                        <i class="ti-calendar"></i>
-                        <p>Courses</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="/Topics/Index">
-                        <i class="ti-calendar"></i>
-                        <p>Topics</p>
-                    </a>
-                </li>
-}
+    <li>
+        <a href="/Courses/Index">
+            <i class="ti-calendar"></i>
+            <p>Courses</p>
+        </a>
+    </li>
+                    <li>
+                        <a href="/Topics/Index">
+                            <i class="ti-calendar"></i>
+                            <p>Topics</p>
+                        </a>
+                    </li>}
 
         <li>
             <a href="calendar.html">
@@ -67,13 +65,40 @@
                 <p>Statistics</p>
             </a>
         </li>
+       
         <li>
-            <a href="calendar.html">
-                <i class="ti-comment"></i>
-                <p>Communication</p>
+            <a data-toggle="collapse" href="#communication_li">
+                <i class="ti-pencil-alt"></i>
+                <p>
+                    Communication
+                    <b class="caret"></b>
+                </p>
             </a>
-        </li>
+            <div class="collapse" id="communication_li">
+                <ul class="nav">
 
+                    <li>
+                        <a href="/Message/Compose">
+                            <i class="ti-write"></i>
+                            <p>Compose new Message</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Message/Index">
+                            <i class="ti-write"></i>
+                            <p>Inbox</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Message/Outbox">
+                            <i class="ti-write"></i>
+                            <p>Outbox</p>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </li>
 
     </ul>
 </div>

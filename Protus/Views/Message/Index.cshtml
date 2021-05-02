@@ -1,0 +1,67 @@
+﻿@model List<Protus.Data.Entities.Message>
+@{
+    var users = ViewBag.users as List<Protus.Data.Entities.ApplicationUser>;
+}
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+
+                <h4 class="card-title">Message(s) Inbox</h4>
+                <p>
+                    @Html.ActionLink("Compose new message", "Compose", "Message", null, new { @class = "btn btn-primary btn-sm", style = "margin-top:10px;" }) |
+                    @Html.ActionLink("Outbox", "Outbox", "Message", null, new { @class="btn btn-warning btn-fill btn-sm",style= "margin-top: 10px;" })
+                </p>
+            </div>
+            <div class="card-content">
+                <div class="table-responsive">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr class="text-primary">
+                                    <th>
+                                        Message ID
+                                    </th>
+                                    <th>
+                                        Message
+                                    </th>
+                                    <th>
+                                        From
+                                    </th>
+                                    <th>
+                                        Date
+                                    </th>
+                                </tr>
+
+
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Count > 0)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.Id</td>
+                                            <td>@item.Text</td>
+                                            <td>
+                                                @(string.IsNullOrEmpty(users.FirstOrDefault(x => x.Id == item.MessageFrom)?.FirstName)? users.FirstOrDefault(x => x.Id == item.MessageFrom)?.Email: users.FirstOrDefault(x => x.Id == item.MessageFrom)?.FirstName+" "+ users.FirstOrDefault(x => x.Id == item.MessageFrom)?.LastName )
+                                            </td>
+                                            <td>
+                                                @item.MessageDate
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div><!--  end card  -->
+    </div> <!-- end col-md-12 -->
+</div>
+

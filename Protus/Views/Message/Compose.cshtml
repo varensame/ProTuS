@@ -1,0 +1,50 @@
+﻿@model Protus.Data.Entities.Message
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <form asp-action="Compose" class="form-horizontal">
+              
+                <div class="card-header">
+                    <h4 class="card-title">
+                       Compose New Message
+                    </h4>
+                </div>
+                <div class="card-content">
+                    <div class="form-group">
+                        <label asp-for="MessageTo" class="control-label col-md-2"></label>
+                        <div class="col-md-4">
+                           <select asp-items="ViewBag.users" class="form-control" asp-for="MessageTo"></select>
+                            <span asp-validation-for="MessageTo" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Text" class="control-label col-md-2"></label>
+                        <div class="col-md-4">
+                            <textarea asp-for="Text" class="form-control"></textarea>
+                            <span asp-validation-for="Text" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2"></label>
+                        <div class="col-md-4">
+                            <input type="submit" value="Send" class="btn btn-default" />
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div> <!-- end card -->
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
