@@ -1,0 +1,133 @@
+﻿@inject IJsonHelper Json;
+
+@{
+    var chartData = ViewBag.chartData as List<KeyValuePair<string, int>>;
+}
+<style>
+    .whiteClass {
+        color: white !important;
+    }
+
+    #mainContainerItem {
+        margin-top: -20px;
+    }
+
+        #mainContainerItem > *, #mainContainerItem p {
+            font-size: 12px !important;
+        }
+
+        #mainContainerItem h4 {
+            font-size: 14px !important;
+            font-weight: bolder;
+        }
+
+    .smallContainer {
+        height: 250px;
+        overflow-y: scroll;
+    }
+
+    .xsmallContainer {
+        height: 178px;
+        overflow-y: scroll;
+    }
+
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.3);
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.5);
+    }
+</style>
+<div class="col-md-12">
+    <div class="card ">
+        <div class="card-header bg-primary">
+            <h5 class="card-title whiteClass">Student Statistics</h5>
+            <p class="category"></p>
+        </div>
+        <div class="card-content">
+            @if (chartData.Count == 0)
+            {
+                <div style="position: absolute;left: 42%;top: 35%;">
+                    <p class="text-center">
+
+                        <span class="ti-server" style="font-size: 35px;"></span>
+                    </p>
+                    <p class="text-center">No data found. </p>
+                </div>
+            }
+            <canvas id="tatChartDataChart"></canvas>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    function random_bg_color() {
+        var x = Math.floor(Math.random() * 256);
+        var y = Math.floor(Math.random() * 256);
+        var z = Math.floor(Math.random() * 256);
+        return [x, y, z];
+    }
+    $(document).ready(function () {
+          let dataColumnsArray = @(Html.Raw(Json.Serialize(chartData.Select(z => z.Value).ToArray())));
+
+            let colorsFade = [];
+        let colorsDark = [];
+        let _color = random_bg_color();
+            dataColumnsArray.forEach(function(item) {
+                
+                colorsFade.push(`rgba(${_color.toString()}, 0.2)`);
+                colorsDark.push(`rgba(${_color.toString()}, 1)`);
+
+            });
+         new Chart(document.getElementById('tatChartDataChart').getContext('2d'),
+                {
+                    type: 'bar',
+                    data: {
+                        labels: @(Html.Raw(Json.Serialize(chartData.Select(z => z.Key).ToArray()))),
+                        datasets: [
+                            {
+                                label: 'Solved Challenges',
+                                data: dataColumnsArray,
+                                backgroundColor: colorsFade,
+                                borderColor: colorsDark,
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [
+                                {
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            ],
+                            xAxes: [{
+                                stacked: false,
+                                beginAtZero: true,
+                                scaleLabel: {
+                                    labelString: 'Month'
+                                },
+                                ticks: {
+                                    stepSize: 1,
+                                    min: 0,
+                                    autoSkip: false
+                                }
+                            }]
+                        }
+                    }
+                });
+    });
+</script>

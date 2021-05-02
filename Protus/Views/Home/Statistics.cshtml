@@ -1,0 +1,76 @@
+﻿
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Statistics</h4>
+            </div>
+            <div class="card-content">
+                <div class="row">
+                    <form method="get">
+                        <div class="col-sm-12">
+
+
+                            <div class="col-sm-3" style='display:@(User.IsInRole("Student")?"none":"block")'>
+                                <div class="col-sm-12" style="padding-left:0px;">
+                                    <p><b>Select Student:</b></p>
+                                    <select class="form-control" id="studentDDL">
+
+                                        @foreach (var item in ViewBag.users as List<Protus.Data.Entities.ApplicationUser>)
+                                        {
+                                            <option value="@item.Id">@(item.FirstName==null?item.Email:item.FirstName+" "+item.LastName)</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="col-sm-12" style="padding-left:0px;">
+                                    <p><b>Select Course:</b></p>
+                                    <select class="form-control" id="coursesDDL">
+
+                                        @foreach (var item in ViewBag.courses as List<Protus.Data.Entities.Course>)
+                                        {
+                                            <option value="@item.Id">@(item.Name)</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+
+                                <div class="form-group" style="padding-top:36px;">
+                                    <button class="btn btn-success btn-sm btn-fill" type="button" onclick="GetResults()">Get Result(s)</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div><!--  end card  -->
+    </div> <!-- end col-md-12 -->
+</div>
+<div class="row" id="resultsDiv">
+
+</div>
+
+@section Scripts{
+    <script src="~/assets/js/chartjs.min.js"></script>
+    <script type="text/javascript">
+        function GetResults() {
+            let courseId = $('#coursesDDL').val();
+            let studentId = $('#studentDDL').val();
+            $.ajax({
+                type: 'GET',
+                url: `/Home/GetResults?course=${courseId}&student=${studentId}`,
+                success: function (response) {
+                    $('#resultsDiv').html(response);
+                },
+                error: function () {
+
+                }
+            });
+        }
+    </script>
+
+}
