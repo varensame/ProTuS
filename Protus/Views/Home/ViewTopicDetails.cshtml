@@ -22,9 +22,9 @@
                     <div class="nav-tabs-wrapper">
                         <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
                             <li class="active"><a href="#home" data-toggle="tab" aria-expanded="true">Explanation</a></li>
-                            <li class=""><a href="#profile" data-toggle="tab" aria-expanded="false">Examples</a></li>
+                            <li class=""><a href="#exampleTab" data-toggle="tab" aria-expanded="false">Examples</a></li>
                             <li class=""><a href="#challenges" data-toggle="tab" aria-expanded="false">Challenges</a></li>
-                            <li class=""><a href="#messages" data-toggle="tab" aria-expanded="false">Coding Exercises</a></li>
+                            <li class=""><a href="#exercises" data-toggle="tab" aria-expanded="false">Coding Exercises</a></li>
                         </ul>
                     </div>
                 </div>
@@ -32,8 +32,30 @@
                     <div class="tab-pane active" id="home">
                         @(Html.Raw(Model.Description))
                     </div>
-                    <div class="tab-pane" id="profile">
-                        <p>Here is your profile.</p>
+                    <div class="tab-pane" id="exampleTab">
+                        <div class="row">
+                            <h4>Example(s) for current topic</h4>
+                            <div class="col-md-12">
+                                @if (Model.Examples != null)
+                                {
+                                    foreach (var item in Model.Examples)
+                                    {
+                                        <div class="col-md-3">
+                                            <div class="card">
+                                                <div class="card-content">
+                                                    <a href="javascript:OpenExample(@item.Id)">  <img src="~/assets/img/knight.png" /></a>
+                                                </div>
+                                                <div class="card-footer">
+                                                    @item.Title
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                            </div>
+
+                        </div>
                     </div>
                     <div class="tab-pane" id="challenges">
                         <div class="row">
@@ -79,6 +101,50 @@
                             </div>
                         </div>
                     </div>
+                    <div class="tab-pane" id="exercises">
+                        <div class="row">
+                            <h4>Coding Exercise(s) for current topic</h4>
+                            <div class="col-md-12">
+                                @if (Model.CodingExercises != null)
+                                {
+                                    foreach (var item in Model.CodingExercises)
+                                    {
+                                        <div class="col-md-3">
+                                            <div class="card">
+                                                <div class="card-content">
+                                                    <a href="javascript:OpenExercise(@item.Id)">  <img src="~/assets/img/knight.png" /></a>
+                                                </div>
+                                                <div class="card-footer">
+                                                    @item.Title
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                            </div>
+                            <h4>Solved Coding Exercise(s)</h4>
+                            <div class="col-md-12">
+                                @if (ViewBag.solvedExercises != null)
+                                {
+                                    foreach (var item in ViewBag.solvedExercises as List<Protus.Data.Entities.CodingExercise>)
+                                    {
+                                        <div class="col-md-3">
+                                            <div class="card">
+                                                <div class="card-content">
+                                                    <a href="javascript:OpenExercise(@item.Id)">  <img src="~/assets/img/knight.png" /></a>
+                                                </div>
+                                                <div class="card-footer">
+                                                    @item.Title
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -105,12 +171,55 @@
         </div>
     </div>
 </div>
+<div class="modal fade modal-primary" id="viewExampleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-login">
+        <div class="modal-content">
+            <div class="card card-login card-plain">
+                <div class="modal-header ">
+                    <h5 style="margin:15px -3px;display:inline;">  <strong> Example</strong></h5>
 
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="viewExampleModalBody">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade modal-primary" id="viewExerciseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-login">
+        <div class="modal-content">
+            <div class="card card-login card-plain">
+                <div class="modal-header ">
+                    <h5 style="margin:15px -3px;display:inline;">  <strong> Example</strong></h5>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="viewExerciseModalBody">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
 <script type="text/javascript">
+    function EmptyMOdels() {
+        $('#viewExampleModalBody').empty();
+        $('#viewChallengeModalBody').empty();
+        $('#viewExerciseModalBody').empty();
+    }
     function OpenChallenge(challengeId) {
+        EmptyMOdels();
         $.ajax({
             type: 'GET',
             url: '/Topics/GetChallengeDetails/' + challengeId,
@@ -132,4 +241,51 @@
 
 
     }
+    function OpenExample(exampleId) {
+        EmptyMOdels();
+        $.ajax({
+            type: 'GET',
+            url: '/Topics/GetExampleDetails/' + exampleId,
+            success: function (response) {
+                $('#viewExampleModalBody').html(response);
+                $('#viewExampleModal').modal();
+            },
+            error: function () {
+
+            }
+        }).done(function () {
+
+            setTimeout(function () {
+                $('.CodeMirror').each(function (i, el) {
+                    el.CodeMirror.refresh();
+                });
+            }, 200);
+        });
+
+
+    }
+    function OpenExercise(exampleId) {
+        EmptyMOdels();
+        $.ajax({
+            type: 'GET',
+            url: '/Topics/GetExerciseDetails/' + exampleId,
+            success: function (response) {
+                $('#viewExerciseModalBody').html(response);
+                $('#viewExerciseModal').modal();
+            },
+            error: function () {
+
+            }
+        }).done(function () {
+
+            setTimeout(function () {
+                $('.CodeMirror').each(function (i, el) {
+                    el.CodeMirror.refresh();
+                });
+            }, 200);
+        });
+
+
+    }
+    
 </script>

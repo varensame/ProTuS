@@ -1,15 +1,16 @@
-﻿@model List<Protus.Data.Entities.Topic>
-
-
+﻿@model List<Protus.Data.Entities.Example>
+@{
+    var counter = 0;
+}
 
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
 
-                <h4 class="card-title">Manage Topic(s)</h4>
+                <h4 class="card-title">Manage Topic Example(s) </h4>
                 <p>
-                    @Html.ActionLink("Create New", "Create", "Topics", null, new { @class = "btn btn-primary", style = "margin-top:10px;" })
+                    @Html.ActionLink("Create New", "CreateExample", "Topics", new { topicId = ViewBag.topicId, Id = 0 }, new { @class = "btn btn-primary", style = "margin-top:10px;" })
                 </p>
             </div>
             <div class="card-content">
@@ -19,10 +20,10 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        Topic
+                                        #
                                     </th>
                                     <th>
-                                        Course
+                                        Example
                                     </th>
                                     <th>Action</th>
                                 </tr>
@@ -32,17 +33,13 @@
                                 {
                                     <tr>
                                         <td>
-                                            @item.Name
+                                            @(++counter)
                                         </td>
                                         <td>
-                                            @item.Course.Name
+                                            @item.Title
                                         </td>
                                         <td>
-                                            <a asp-action="Create" asp-route-id="@item.TopicId">Edit</a> |
-                                            <a asp-action="ManageChallenges" asp-route-id="@item.TopicId">Manage Challenge(s)</a> |
-                                            <a asp-action="ManageExamples" asp-route-id="@item.TopicId">Manage Example(s)</a> |
-                                            <a asp-action="ManageExercises" asp-route-id="@item.TopicId">Manage Coding Exercise(s)</a> |
-                                            <a asp-action="Delete" asp-route-id="@item.TopicId">Delete</a>
+                                            <a asp-action="CreateExample" asp-route-id="@item.Id" asp-route-topicId="@item.TopicId">Edit</a>
                                         </td>
                                     </tr>
                                 }
@@ -54,4 +51,4 @@
             </div>
         </div><!--  end card  -->
     </div> <!-- end col-md-12 -->
-</div>
+</div> 

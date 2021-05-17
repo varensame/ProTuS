@@ -12,6 +12,8 @@ namespace Protus.Data.Entities
         public Topic()
         {
             Challenges = new List<Challenge>();
+            Examples = new List<Example>();
+            CodingExercises = new List<CodingExercise>();
         }
 
 
@@ -25,5 +27,7 @@ namespace Protus.Data.Entities
         public Course Course { get; set; }
 
         public ICollection<Challenge> Challenges { get; set; }
+        public ICollection<Example> Examples { get; set; }
+        public ICollection<CodingExercise> CodingExercises { get; set; }
     }
 }

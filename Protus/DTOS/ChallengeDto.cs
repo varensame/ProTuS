@@ -18,6 +18,17 @@ namespace Protus.DTOS
         public IEnumerable<ChallengeOptionDto> ChallengeOptions { get; set; }
         public int Id { get; set; }
     }
+    public class ExampleDto
+    {
+        [Required]
+        public string Title { get; set; }
+        [Required]
+        public string Description { get; set; }
+        public string Code { get; set; }
+        public int TopicId { get; set; }
+      
+        public int Id { get; set; }
+    }
 
 
     public class ChallengeOptionDto

@@ -76,6 +76,18 @@ namespace Protus.Controllers
             var challenges =await _context.Challenges.Where(x => x.TopicId == id).ToListAsync();
             return View(challenges);
         }
+        public async Task<IActionResult> ManageExamples(int id)
+        {
+            ViewBag.topicId = id;
+            var examples = await _context.Examples.Where(x => x.TopicId == id).ToListAsync();
+            return View(examples);
+        }
+        public async Task<IActionResult> ManageExercises(int id)
+        {
+            ViewBag.topicId = id;
+            var examples = await _context.CodingExercises.Where(x => x.TopicId == id).ToListAsync();
+            return View(examples);
+        }
 
         public IActionResult CreateChallenge(int id,int topicId)
         {
@@ -94,6 +106,40 @@ namespace Protus.Controllers
                         IsAnswer = x.IsAnswer,
                         Option = x.Option
                     })
+
+                }).FirstOrDefault();
+            }
+            return View(model);
+        }
+        public IActionResult CreateExample(int id, int topicId)
+        {
+            ExampleDto model = new ExampleDto() { TopicId = topicId };
+            if (id > 0)
+            {
+                model = _context.Examples.Where(x => x.Id == id).Select(x => new ExampleDto
+                {
+                    Id = x.Id,
+                    Code = x.Code,
+                    Description = x.Description,
+                    Title = x.Title,
+                    TopicId = x.TopicId ?? 0,
+                 
+                }).FirstOrDefault();
+            }
+            return View(model);
+        }
+        public IActionResult CreateExercise(int id, int topicId)
+        {
+            ExampleDto model = new ExampleDto() { TopicId = topicId };
+            if (id > 0)
+            {
+                model = _context.CodingExercises.Where(x => x.Id == id).Select(x => new ExampleDto
+                {
+                    Id = x.Id,
+                    Code = x.Code,
+                    Description = x.Description,
+                    Title = x.Title,
+                    TopicId = x.TopicId ?? 0,
 
                 }).FirstOrDefault();
             }
@@ -143,12 +189,55 @@ namespace Protus.Controllers
             }
             return RedirectToAction("Index");
         }
+        [HttpPost]
+        public IActionResult CreateExercise(ExampleDto model)
+        {
+            var _exercise = model.Id == 0 ? new Data.Entities.CodingExercise() : _context.CodingExercises.Find(model.Id);
+
+            _exercise.Code = model.Code;
+            _exercise.Title = model.Title;
+            _exercise.Description = model.Description;
+            _exercise.TopicId = model.TopicId;
+            if (model.Id == 0)
+            {
+                _context.CodingExercises.Add(_exercise);
+            }
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public IActionResult CreateExample(ExampleDto model)
+        {
+            var _example = model.Id == 0 ? new Data.Entities.Example() : _context.Examples.Find(model.Id);
+
+            _example.Code = model.Code;
+            _example.Title = model.Title;
+            _example.Description = model.Description;
+            _example.TopicId = model.TopicId;
+            if (model.Id == 0)
+            {
+                _context.Examples.Add(_example);
+            }
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
 
         public IActionResult GetChallengeDetails(int id)
         {
             var model = _context.Challenges.Include(x => x.ChallengeOptions).FirstOrDefault(x => x.Id == id);
             return PartialView(model);
         }
+        public IActionResult GetExampleDetails(int id)
+        {
+            var model = _context.Examples.FirstOrDefault(x => x.Id == id);
+            return PartialView(model);
+        }
+        public IActionResult GetExerciseDetails(int id)
+        {
+            var model = _context.CodingExercises.FirstOrDefault(x => x.Id == id);
+            return PartialView(model);
+        }
+
         [HttpPost]
         public IActionResult SolvedChallenge(int Id)
         {
@@ -167,7 +256,26 @@ namespace Protus.Controllers
             _context.SaveChanges();
             return Json(true);
         }
-        
+         
+        [HttpPost]
+        public IActionResult SolvedExercise(int Id,string code)
+        {
+            string userId = GetUserId();
+            var rows = _context.SolvedCodingExercises.Where(x => x.ExerciseId == Id && x.UserId == userId).ToList();
+            if (rows != null && rows.Count > 0)
+            {
+                _context.SolvedCodingExercises.RemoveRange(rows);
+                _context.SaveChanges();
+            }
+            _context.SolvedCodingExercises.Add(new Data.Entities.SolvedCodingExercise
+            {
+                UserId = userId,
+                ExerciseId = Id,
+                 Code=code
+            });
+            _context.SaveChanges();
+            return Json(true);
+        }
 
     }
 }

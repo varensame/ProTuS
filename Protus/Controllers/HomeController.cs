@@ -32,11 +32,17 @@ namespace Protus.Controllers
         
         public async Task<IActionResult>  ViewTopicDetails(int id)
         {
-            var topic=await applicationDbContext.Topics.Include(x=>x.Course).Include(x=>x.Challenges).FirstOrDefaultAsync(x=>x.TopicId==id);
+            var topic=await applicationDbContext.Topics.Include(x=>x.Course).Include(x=>x.Challenges).Include(x=>x.CodingExercises).Include(x=>x.Examples).FirstOrDefaultAsync(x=>x.TopicId==id);
             string userId =GetUserId();
 
             var userChallenges = applicationDbContext.SolvedChallenges.Where(x => x.UserId == userId).Select(x => x.ChallengeId).ToList();
             ViewBag.solvedChallenges = applicationDbContext.Challenges.Where(x => x.TopicId == id && userChallenges.Contains(x.Id)).ToList();
+
+            var userExercises = applicationDbContext.SolvedCodingExercises.Where(x => x.UserId == userId).Select(x => x.ExerciseId).ToList();
+            ViewBag.solvedExercises = applicationDbContext.CodingExercises.Where(x => x.TopicId == id && userExercises.Contains(x.Id)).ToList();
+
+
+
             return View(topic);
         }
 

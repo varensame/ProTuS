@@ -1,0 +1,54 @@
+﻿@model Protus.Data.Entities.CodingExercise
+<style type="text/css">
+    .selected {
+        background-color: lightgreen;
+    }
+
+    .wrong {
+        background-color: orangered;
+    }
+</style>
+<div class="panel panel-primary">
+    <div class="panel-heading">@Model.Title</div>
+    <div class="panel-body">@Model.Description</div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <textarea class="form-control" id="codeViewEditor">@Model.Code</textarea>
+    </div>
+</div>
+<div class="row" style="padding:3%;">
+
+    <p class="text-center">
+        <button type="button" class="btn btn-primary btn-fill" onclick="SubmitExercise()">Submit</button>
+    </p>
+
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var editor = CodeMirror.fromTextArea(document.getElementById("codeViewEditor"), {
+            lineNumbers: true,
+            matchBrackets: true,
+            mode: "text/x-java"
+        });
+        editor.save();
+        editor.setSize(null, 500);
+
+    });
+    function SubmitExercise() {
+
+         $.ajax({
+                type: 'POST',
+             url: '/Topics/SolvedExercise/@(Model.Id)',
+             data: { code: $('#codeViewEditor').val() },
+                success: function () {
+                    window.location.href = window.location.href;
+                }
+            });
+    }
+    
+</script>
+
+
