@@ -83,10 +83,10 @@
 
             let colorsFade = [];
         let colorsDark = [];
-        let _color = random_bg_color();
+       
             dataColumnsArray.forEach(function(item) {
-                
-                colorsFade.push(`rgba(${_color.toString()}, 0.2)`);
+                let _color = random_bg_color();
+                colorsFade.push(`rgba(${_color.toString()}, 1)`);
                 colorsDark.push(`rgba(${_color.toString()}, 1)`);
 
             });

@@ -28,7 +28,11 @@ namespace Protus.Controllers
             return View();
         }
 
-
+        public IActionResult LearningMeterial()
+        {
+            var courses= applicationDbContext.Courses.Include(x => x.Topics).ToList();
+            return View(courses);
+        }
         
         public async Task<IActionResult>  ViewTopicDetails(int id)
         {
@@ -70,7 +74,7 @@ namespace Protus.Controllers
             var topics= await applicationDbContext.Challenges.Include(x => x.Topic).Where(x => x.Topic.CourseId == course).Select(x => new ResultChartDataDto {  ChallengeId=x.Id,Topic = x.Title + " - " + x.Topic.Name }).ToListAsync();
             foreach (var item in topics)
             {
-                item.Marks =(await applicationDbContext.SolvedChallenges.AnyAsync(x => x.UserId == student && x.ChallengeId == item.ChallengeId))?1:0;
+                item.Marks =(await applicationDbContext.SolvedChallenges.AnyAsync(x => x.UserId == student && x.ChallengeId == item.ChallengeId))?100:0;
             }
             ViewBag.chartData = topics.Select(x => new KeyValuePair<string, int>(x.Topic, x.Marks)).ToList();
             return PartialView();

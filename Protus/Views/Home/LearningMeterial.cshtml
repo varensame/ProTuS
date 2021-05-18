@@ -1,0 +1,24 @@
+﻿@model List<Protus.Data.Entities.Course>
+@{
+
+    ViewData["Title"] = "Learning Material";
+}
+<div class="row">
+    <div class="col-md-12" style="padding:5px 20px;">
+        @foreach (var item in Model)
+        {
+
+            <h4>@item.Name</h4>
+            <ul>
+                @foreach (var topic in item.Topics)
+                {
+                    <li>@topic.Name</li>
+                }
+            </ul>
+            
+        }
+
+    </div>
+
+</div>
+
